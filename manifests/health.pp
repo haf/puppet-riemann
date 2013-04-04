@@ -4,11 +4,17 @@ class riemann::health(
   $config_file_template = '',
   $log_dir = $riemann::params::log_dir
 ) inherits riemann::params {
+  include svcutils
+
   $user = $riemann::params::health_user
+  $group = defined(Class['riemann']) ? {
+    true     => $riemann::group,
+    default  => $riemann::params::group,
+  }
 
   anchor { 'riemann::health::start': }
 
-  riemann::utils::stduser { $user:
+  svcutils::svcuser { $user:
     group => $group,
     require => Anchor['riemann::health::start'],
     before  => Anchor['riemann::health::end'],

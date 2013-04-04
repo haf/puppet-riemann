@@ -1,6 +1,4 @@
-# Parameters
-# - config_file: the clojure configuration file for riemann,
-#   not an upstart script or dash config. This should be a 'source' path
+# Install the riemann server on the server.
 class riemann(
   $version            = $riemann::params::version,
   $config_file        = $riemann::params::config_file,
@@ -16,7 +14,15 @@ class riemann(
   $user               = $riemann::params::user,
   $use_pkg            = $riemann::params::use_pkg
 ) inherits riemann::params {
+  include svcutils
+
   validate_string($version, $host, $port)
+
+  if ! defined(Class['java']) {
+    class { 'java':
+      distribution => 'jre',
+    }
+  }
 
   anchor { 'riemann::start': }
 
@@ -27,7 +33,7 @@ class riemann(
     before  => Anchor['riemann::end'],
   }
 
-  riemann::utils::stduser { $user:
+  svcutils::svcuser { $user:
     group => $group,
     require => Anchor['riemann::start'],
     before  => Anchor['riemann::end'],
@@ -42,7 +48,10 @@ class riemann(
   }
 
   class { 'riemann::package':
-    require => Anchor['riemann::start'],
+    require => [
+      Anchor['riemann::start'],
+      Class['java'],
+    ],
     before  => Anchor['riemann::end'],
   } ->
   class { 'riemann::config':

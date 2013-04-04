@@ -4,9 +4,9 @@ class riemann::net::service(
   $enable = true
 ) {
   $log_dir = $riemann::net::log_dir
-  $group   = $riemann::group
+  $group   = $riemann::net::group
 
-  riemann::utils::mixsvc { 'riemann-net':
+  svcutils::mixsvc { 'riemann-net':
     log_dir     => $log_dir,
     ensure      => $ensure,
     enable      => $enable,

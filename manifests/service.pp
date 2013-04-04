@@ -14,7 +14,7 @@ class riemann::service(
       ensure => 'running',
     }
   } else {
-    riemann::utils::mixsvc { 'riemann':
+    svcutils::mixsvc { 'riemann':
       ensure      => $ensure,
       enable      => $enable,
       user        => $user,

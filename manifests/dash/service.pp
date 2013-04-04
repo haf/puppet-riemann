@@ -4,11 +4,11 @@ class riemann::dash::service(
   $enable = true
 ) {
   $log_dir     = $riemann::dash::log_dir
-  $group       = $riemann::group
   $config_file = $riemann::dash::config_file
   $home        = $riemann::dash::home
+  $group       = $riemann::dash::group
 
-  riemann::utils::mixsvc { 'riemann-dash':
+  svcutils::mixsvc { 'riemann-dash':
     log_dir     => $log_dir,
     ensure      => $ensure,
     enable      => $enable,

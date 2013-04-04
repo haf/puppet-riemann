@@ -3,9 +3,9 @@ class riemann::health::service(
   $enable = true
 ) {
   $log_dir = $riemann::health::log_dir
-  $group   = $riemann::group
+  $group   = $riemann::health::group
 
-  riemann::utils::mixsvc { 'riemann-health':
+  svcutils::mixsvc { 'riemann-health':
     log_dir     => $log_dir,
     ensure      => $ensure,
     enable      => $enable,
