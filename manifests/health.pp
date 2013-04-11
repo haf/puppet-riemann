@@ -7,16 +7,21 @@ class riemann::health(
   include svcutils
 
   $user = $riemann::params::health_user
-  $group = defined(Class['riemann']) ? {
+
+  $is_on_server = defined(Class['riemann'])
+
+  $group = $is_on_server ? {
     true     => $riemann::group,
     default  => $riemann::params::group,
   }
 
   anchor { 'riemann::health::start': }
-
   svcutils::svcuser { $user:
     group => $group,
-    require => Anchor['riemann::health::start'],
+    require => [
+      Anchor['riemann::health::start'],
+      Class['riemann::common']
+    ],
     before  => Anchor['riemann::health::end'],
   } ->
   class { 'riemann::health::package':

@@ -17,17 +17,20 @@ class riemann::dash(
   $config_file = $riemann::params::dash_config_file
   $user        = $riemann::params::dash_user
   $home        = $riemann::params::dash_home
+
   $group = defined(Class['riemann']) ? {
     true     => $riemann::group,
     default  => $riemann::params::group,
   }
 
   anchor { 'riemann::dash::start': }
-
   svcutils::svcuser { $user:
     group   => $group,
     home    => $home,
-    require => Anchor['riemann::dash::start'],
+    require => [
+      Anchor['riemann::dash::start'],
+      Class['riemann::common']
+    ],
     before  => Anchor['riemann::dash::end'],
   } ->
 

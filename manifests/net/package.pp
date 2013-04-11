@@ -1,5 +1,13 @@
 class riemann::net::package(
   $ensure = 'installed'
 ) inherits riemann::params {
-  Package <| title == 'riemann-tools' |>
+  if ! defined(Package['riemann-tools']) {
+    package { 'riemann-tools':
+      ensure   => 'installed',
+      provider => gem,
+      require  => [
+        Package[$riemann::params::tools_packages]
+      ],
+    }
+  }
 }

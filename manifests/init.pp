@@ -25,28 +25,14 @@ class riemann(
   }
 
   anchor { 'riemann::start': }
-
-  group { $group:
-    ensure  => present,
-    system  => true,
-    require => Anchor['riemann::start'],
-    before  => Anchor['riemann::end'],
-  }
-
   svcutils::svcuser { $user:
-    group => $group,
-    require => Anchor['riemann::start'],
+    group   => $group,
+    require => [
+      Anchor['riemann::start'],
+      Class['riemann::common']
+    ],
     before  => Anchor['riemann::end'],
-  }
-
-  ensure_packages($riemann::params::tools_packages)
-
-  @package { 'riemann-tools':
-    ensure   => 'installed',
-    provider => gem,
-    require  => Package[$riemann::params::tools_packages],
-  }
-
+  } ->
   class { 'riemann::package':
     require => [
       Anchor['riemann::start'],

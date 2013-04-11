@@ -7,16 +7,21 @@ class riemann::net(
   include svcutils
 
   $user = $riemann::params::net_user
-  $group = defined(Class['riemann']) ? {
+
+  $is_on_server = defined(Class['riemann'])
+
+  $group = $is_on_server ? {
     true     => $riemann::group,
     default  => $riemann::params::group,
   }
 
   anchor { 'riemann::net::start': }
-
   svcutils::svcuser { $user:
     group => $group,
-    require => Anchor['riemann::net::start'],
+    require => [
+      Anchor['riemann::net::start'],
+      Class['riemann::common']
+    ],
     before  => Anchor['riemann::net::end'],
   } ->
   class { 'riemann::net::package':
