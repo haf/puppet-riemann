@@ -44,7 +44,11 @@ class riemann::params {
       'gcc-c++',
       'ruby',
       'rubygems',
-      'ruby-devel'
+      'ruby-devel',
+      'libxml2',
+      'libxml2-devel',
+      'libxslt',
+      'libxslt-devel'
     ],
     default => [
       'build-essential',
