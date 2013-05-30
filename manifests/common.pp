@@ -21,6 +21,6 @@ class riemann::common(
     ],
     before   => Anchor['riemann::common::end'],
   }
-  
+
   anchor { 'riemann::common::end': }
 }

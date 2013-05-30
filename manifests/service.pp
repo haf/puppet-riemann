@@ -20,8 +20,7 @@ class riemann::service(
       user        => $user,
       group       => $group,
       log_dir     => $log_dir,
-      exec        => "${bin_dir}/riemann",
-      args        => $config,
+      exec        => "${bin_dir}/riemann $config",
       description => 'Riemann Server'
     } 
   }

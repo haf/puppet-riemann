@@ -10,7 +10,6 @@ class riemann::health::service(
     ensure      => $ensure,
     enable      => $enable,
     exec        => '/usr/bin/riemann-health',
-    args        => '',
     description => 'Riemann Health Process',
     group       => $group,
   }

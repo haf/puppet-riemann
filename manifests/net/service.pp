@@ -11,7 +11,6 @@ class riemann::net::service(
     ensure      => $ensure,
     enable      => $enable,
     exec        => '/usr/bin/riemann-net',
-    args        => '',
     description => 'Riemann Net Process',
     group       => $group,
   }

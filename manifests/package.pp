@@ -5,8 +5,6 @@ class riemann::package inherits riemann::params {
 
   ensure_packages($riemann::params::packages)
 
-  class { 'wget': }
-
   if $use_pkg {
     $package_provider = $::osfamily ? {
       /(?i:linux|redhat)/ => 'rpm',

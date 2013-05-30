@@ -10,7 +10,6 @@ class riemann::riak::service(
     ensure      => $ensure,
     enable      => $ensure,
     exec        => '/usr/bin/riemann-riak',
-    args        => '',
     description => 'Riemann Riak - Riak monitoring',
     group       => $group,
   }

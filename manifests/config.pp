@@ -12,6 +12,7 @@ class riemann::config {
   }
   $user          = $riemann::user
   $group         = $riemann::group
+  $log_dir       = $riemann::log_dir
 
   file { '/etc/riemann':
     ensure => directory,
@@ -28,6 +29,12 @@ class riemann::config {
     group   => $group,
     mode    => '644',
     require => File['/etc/riemann'],
+  }
+  
+  file { $log_dir:
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
   }
 
   file { '/etc/puppet/riemann.yaml':
