@@ -1,8 +1,9 @@
 class riemann::riak(
-  $enable  = true,
-  $config_file = '',
+  $enable               = true,
+  $config_file          = '',
   $config_file_template = '',
-  $log_dir = $riemann::params::log_dir
+  $log_dir              = $riemann::params::log_dir,
+  $ruby_version
 ) inherits riemann::params {
   include svcutils
 

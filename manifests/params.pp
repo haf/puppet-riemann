@@ -42,9 +42,10 @@ class riemann::params {
       'automake',
       'gcc',
       'gcc-c++',
-      'ruby',
-      'rubygems',
-      'ruby-devel',
+      # using Class['ruby'] instead
+      #'ruby',
+      #'rubygems',
+      #'ruby-devel',
       'libxml2',
       'libxml2-devel',
       'libxslt',

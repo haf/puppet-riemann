@@ -9,6 +9,8 @@ class riemann::service(
   $use_pkg = $riemann::use_pkg
   $config  = $riemann::config_file
 
+  rvm::system_user { 'riemann': }
+
   if $use_pkg {
     service { 'riemann':
       ensure => 'running',
@@ -21,7 +23,8 @@ class riemann::service(
       group       => $group,
       log_dir     => $log_dir,
       exec        => "${bin_dir}/riemann $config",
-      description => 'Riemann Server'
+      description => 'Riemann Server',
+      before      => Rvm::System_user['riemann'],
     } 
   }
 }

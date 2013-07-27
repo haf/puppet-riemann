@@ -10,7 +10,8 @@ class riemann::dash(
   $config_file_template = 'riemann/riemann-dash.rb.erb',
   $host                 = $riemann::params::dash_host,
   $port                 = $riemann::params::dash_port,
-  $log_dir               = $riemann::params::log_dir
+  $log_dir              = $riemann::params::log_dir,
+  $ruby_version
 ) inherits riemann::params {
   include svcutils
 
