@@ -1,9 +1,9 @@
 class riemann::health(
-  $enable = true,
-  $config_file = '',
+  $enable               = true,
+  $config_file          = '',
   $config_file_template = '',
-  $log_dir = $riemann::params::log_dir,
-  $ruby_version
+  $log_dir              = $riemann::params::log_dir,
+  $ruby_version         = $riemann::params::ruby_version
 ) inherits riemann::params {
   include svcutils
 

@@ -1,5 +1,6 @@
 class riemann::params {
-  $version     = '0.2.0'
+  $version              = '0.2.0'
+  $ruby_version         = '1.9.3-p448'
   $config_file          = '/etc/riemann/riemann.config'
   $config_file_source   = ''
   $config_file_template = 'riemann/riemann.config.erb'
