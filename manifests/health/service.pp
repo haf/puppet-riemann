@@ -2,11 +2,10 @@ class riemann::health::service(
   $ensure = 'running',
   $enable = true
 ) {
-  $log_dir = $riemann::health::log_dir
-  $group   = $riemann::health::group
+  $log_dir      = $riemann::health::log_dir
+  $group        = $riemann::health::group
   $ruby_version = $riemann::health::ruby_version
-
-  rvm::system_user { 'riemann-health': }
+  $user         = $riemann::health::user
 
   svcutils::mixsvc { 'riemann-health':
     log_dir     => $log_dir,
@@ -15,6 +14,8 @@ class riemann::health::service(
     exec        => "/usr/local/rvm/bin/rvm $ruby_version do riemann-health",
     description => 'Riemann Health Process',
     group       => $group,
-    before      => Rvm::System_user['riemann-health'],
-  }
+    user        => $user,
+  } ->
+
+  rvm::system_user { 'riemann-health': }
 }

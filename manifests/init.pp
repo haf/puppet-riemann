@@ -12,7 +12,8 @@ class riemann(
   $log_dir            = $riemann::params::log_dir,
   $group              = $riemann::params::group,
   $user               = $riemann::params::user,
-  $use_pkg            = $riemann::params::use_pkg
+  $use_pkg            = $riemann::params::use_pkg,
+  $manage_firewall    = false
 ) inherits riemann::params {
   include svcutils
 

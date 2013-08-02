@@ -18,7 +18,7 @@ class riemann::health(
 
   anchor { 'riemann::health::start': }
   svcutils::svcuser { $user:
-    group => $group,
+    group   => $group,
     require => [
       Anchor['riemann::health::start'],
       Class['riemann::common']

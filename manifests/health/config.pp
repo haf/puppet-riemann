@@ -1,1 +1,2 @@
-class riemann::health::config {}
+class riemann::health::config {
+}

@@ -8,8 +8,7 @@ class riemann::dash::service(
   $home         = $riemann::dash::home
   $group        = $riemann::dash::group
   $ruby_version = $riemann::dash::ruby_version
-
-  rvm::system_user { 'riemann-dash': }
+  $user         = $riemann::dash::user
 
   svcutils::mixsvc { 'riemann-dash':
     log_dir     => $log_dir,
@@ -19,6 +18,8 @@ class riemann::dash::service(
     description => 'A service that launches the riemann dashboard',
     group       => $group,
     home        => $home,
-    before      => Rvm::System_user['riemann-dash'],
-  }
+    user        => $user
+  } ->
+
+  rvm::system_user { $user: }
 }

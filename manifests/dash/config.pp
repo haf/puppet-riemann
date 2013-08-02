@@ -7,14 +7,15 @@ class riemann::dash::config {
   $config_file_template = $riemann::dash::config_file_template
   $host                 = $riemann::dash::host
   $port                 = $riemann::dash::port
+  $manage_firewall      = $riemann::dash::manage_firewall
 
-  $manage_source = $config_file_source ? {
+  $_source = $config_file_source ? {
     ''      => undef,
     undef   => undef,
     default => $config_file_source,
   }
 
-  $manage_content = $config_file_source ? {
+  $_content = $config_file_source ? {
     ''      => template($config_file_template),
     undef   => template($config_file_template),
     default => undef,
@@ -22,7 +23,16 @@ class riemann::dash::config {
 
   file { '/etc/riemann/riemann-dash.rb':
     ensure  => present,
-    source  => $manage_source,
-    content => $manage_content,
+    source  => $_source,
+    content => $_content,
+  }
+
+  if $manage_firewall {
+    firewall { "100 allow riemann-dash:$port":
+      proto  => 'tcp',
+      state  => ['NEW'],
+      dport  => $port,
+      action => 'accept',
+    }
   }
 }

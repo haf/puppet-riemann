@@ -1,24 +1,25 @@
 class riemann::config {
-  $host          = $riemann::host
-  $port          = $riemann::port
-  $config_file   = $riemann::config_file
-  $config_source = $riemann::config_file_source ? {
+  $host            = $riemann::host
+  $port            = $riemann::port
+  $config_file     = $riemann::config_file
+  $config_source   = $riemann::config_file_source ? {
     ''      => undef,
     default => $riemann::config_file_source,
   }
-  $config_content = $riemann::config_file_source ? {
+  $config_content  = $riemann::config_file_source ? {
     ''      => template($riemann::config_file_template),
     default => undef,
   }
-  $user          = $riemann::user
-  $group         = $riemann::group
-  $log_dir       = $riemann::log_dir
+  $user            = $riemann::user
+  $group           = $riemann::group
+  $log_dir         = $riemann::log_dir
+  $manage_firewall = $riemann::manage_firewall
 
   file { '/etc/riemann':
     ensure => directory,
     owner  => $user,
     group  => $group,
-    mode   => '0755',
+    mode   => '0644',
   }
 
   file { $config_file:
@@ -27,7 +28,7 @@ class riemann::config {
     content => $config_content,
     owner   => $user,
     group   => $group,
-    mode    => '644',
+    mode    => '0644',
     require => File['/etc/riemann'],
   }
   
@@ -40,5 +41,14 @@ class riemann::config {
   file { '/etc/puppet/riemann.yaml':
     ensure  => present,
     content => template('riemann/puppet/riemann.yaml.erb'),
+  }
+
+  if $manage_firewall {
+    firewall { "100 allow riemann:$port":
+      proto   => 'tcp',
+      state   => ['NEW'],
+      dport   => $port,
+      action  => 'accept',
+    }
   }
 }
