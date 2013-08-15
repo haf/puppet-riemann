@@ -11,23 +11,27 @@ class riemann::params {
 
   $dir     = '/opt/riemann'
   $bin_dir = "$dir/bin"
-  $log_dir = "/var/log/riemann"
+  $log_dir = '/var/log/riemann'
 
   $group   = 'riemanns'
   $user    = 'riemann'
   $use_pkg = true
 
-  $dash_host   = '0.0.0.0'
-  $dash_port   = 4567
+  $dash_host        = '0.0.0.0'
+  $dash_port        = 4567
   $dash_config_file = '/etc/riemann/riemann-dash.rb'
-  $dash_user   = 'riemann-dash'
-  $dash_home   = '/home/riemann-dash'
+  $dash_user        = 'riemann-dash'
+  $dash_home        = '/home/riemann-dash'
+  $dash_log_dir     = '/var/log/riemann-dash'
 
-  $health_user = 'riemann-health'
+  $health_user      = 'riemann-health'
+  $health_log_dir   = '/var/log/riemann-health'
 
-  $net_user = 'riemann-net'
+  $net_user         = 'riemann-net'
+  $net_log_dir      = '/var/log/riemann-net'
 
-  $riak_user = 'riemann-riak'
+  $riak_user        = 'riemann-riak'
+  $riak_log_dir     = '/var/log/riemann-riak'
 
   $packages = $::osfamily ? {
     /(?i:linux|redhat)/ => [

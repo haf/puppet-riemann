@@ -18,7 +18,7 @@ class riemann::dash::service(
     description => 'A service that launches the riemann dashboard',
     group       => $group,
     home        => $home,
-    user        => $user
+    user        => $user,
   } ->
 
   rvm::system_user { $user: }

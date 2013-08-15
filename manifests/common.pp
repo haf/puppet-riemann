@@ -17,12 +17,12 @@ class riemann::common(
     ensure       => 'installed',
     name         => 'riemann-tools',
     ruby_version => $ruby_version,
-    require  => [
+    require      => [
       Rvm_system_ruby["ruby-$ruby_version"],
       Package[$riemann::params::tools_packages],
       Anchor['riemann::common::start']
     ],
-    before   => Anchor['riemann::common::end'],
+    before       => Anchor['riemann::common::end'],
   }
 
   anchor { 'riemann::common::end': }
