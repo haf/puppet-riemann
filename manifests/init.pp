@@ -19,12 +19,6 @@ class riemann(
 
   validate_string($version, $host, $port)
 
-  if ! defined(Class['java']) {
-    class { 'java':
-      distribution => 'jre',
-    }
-  }
-
   anchor { 'riemann::start': }
   svcutils::svcuser { $user:
     group   => $group,

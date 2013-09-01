@@ -8,6 +8,7 @@ class riemann::dash::config {
   $host                 = $riemann::dash::host
   $port                 = $riemann::dash::port
   $manage_firewall      = $riemann::dash::manage_firewall
+  $ws_config            = "${riemann::dash::home}/config/config.json"
 
   $_source = $config_file_source ? {
     ''      => undef,
@@ -28,7 +29,7 @@ class riemann::dash::config {
   }
 
   if $manage_firewall {
-    firewall { "100 allow riemann-dash:$port":
+    firewall { "201 allow riemann-dash:$port":
       proto  => 'tcp',
       state  => ['NEW'],
       dport  => $port,

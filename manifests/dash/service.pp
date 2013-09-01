@@ -14,7 +14,7 @@ class riemann::dash::service(
     log_dir     => $log_dir,
     ensure      => $ensure,
     enable      => $enable,
-    exec        => "/usr/local/rvm/bin/rvm $ruby_version do riemann-dash $config_file",
+    exec        => "/usr/local/rvm/bin/rvm $ruby_version exec riemann-dash $config_file",
     description => 'A service that launches the riemann dashboard',
     group       => $group,
     home        => $home,

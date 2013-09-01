@@ -50,5 +50,11 @@ class riemann::config {
       dport   => $port,
       action  => 'accept',
     }
+    firewall { "101 allow riemann-websockets:5556":
+      proto   => 'tcp',
+      state   => ['NEW'],
+      dport   => 5556,
+      action  => 'accept',
+    }
   }
 }

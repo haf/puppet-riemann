@@ -12,23 +12,19 @@ class riemann::dash(
   $port                 = $riemann::params::dash_port,
   $log_dir              = $riemann::params::dash_log_dir,
   $ruby_version         = $riemann::params::ruby_version,
+  $config_file          = $riemann::params::dash_config_file,
+  $user                 = $riemann::params::dash_user,
+  $home                 = $riemann::params::dash_home,
+  $group                = $riemann::params::group,
   $manage_firewall      = false
 ) inherits riemann::params {
   include svcutils
-
-  $config_file = $riemann::params::dash_config_file
-  $user        = $riemann::params::dash_user
-  $home        = $riemann::params::dash_home
-
-  $group = defined(Class['riemann']) ? {
-    true     => $riemann::group,
-    default  => $riemann::params::group,
-  }
 
   anchor { 'riemann::dash::start': }
   svcutils::svcuser { $user:
     group   => $group,
     home    => $home,
+    shell   => '/bin/bash',
     require => [
       Anchor['riemann::dash::start'],
       Class['riemann::common']
