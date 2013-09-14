@@ -16,7 +16,7 @@ class riemann::dash(
   $user                 = $riemann::params::dash_user,
   $home                 = $riemann::params::dash_home,
   $group                = $riemann::params::group,
-  $manage_firewall      = false
+  $manage_firewall      = hiera('manage_firewalls', false)
 ) inherits riemann::params {
   include svcutils
 

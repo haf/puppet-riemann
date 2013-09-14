@@ -13,7 +13,7 @@ class riemann(
   $group              = $riemann::params::group,
   $user               = $riemann::params::user,
   $use_pkg            = $riemann::params::use_pkg,
-  $manage_firewall    = false
+  $manage_firewall    = hiera('manage_firewalls', false)
 ) inherits riemann::params {
   include svcutils
 
