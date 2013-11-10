@@ -1,12 +1,10 @@
 Puppet module for installing and managing [Riemann](http://aphyr.github.com/riemann/),
 the event agregation and monitoring tool.
 
-This module is also available on the [Puppet Forge](https://forge.puppetlabs.com/garethr/riemann)
+This module is not available on the forge.
 
 [![Build
-Status](https://secure.travis-ci.org/garethr/garethr-riemann.png)](http://travis-ci.org/garethr/garethr-riemann)
-[![Dependency
-Status](https://gemnasium.com/garethr/garethr-riemann.png)](http://gemnasium.com/garethr/garethr-riemann)
+Status](https://secure.travis-ci.org/haf/puppet-riemann.png)](http://travis-ci.org/haf/puppet-riemann)
 
 ## Usage
 
