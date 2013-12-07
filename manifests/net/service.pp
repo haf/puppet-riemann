@@ -1,6 +1,6 @@
 # Gathers munin statistics and submits them to Riemann.
 class riemann::net::service(
-  $ensure = 'running'
+  $ensure = 'present'
 ) {
   supervisor::service { 'riemann-net':
     ensure      => $ensure,

@@ -1,6 +1,6 @@
 # Installs the riemann-dash service.
 class riemann::dash::service(
-  $ensure = 'running',
+  $ensure = 'present',
 ) {
   supervisor::service { 'riemann-dash':
     ensure      => $ensure,

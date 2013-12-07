@@ -1,5 +1,5 @@
 class riemann::health::service(
-  $ensure = 'running'
+  $ensure = 'present'
 ) {
   $tags         = repeated_param('tag', $riemann::health::_tags)
 

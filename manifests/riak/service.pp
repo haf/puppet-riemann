@@ -1,5 +1,5 @@
 class riemann::riak::service(
-  $ensure = 'running'
+  $ensure = 'present'
 ) {
   supervisor::service { 'riemann-riak':
     ensure      => $ensure,

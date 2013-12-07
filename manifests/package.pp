@@ -1,6 +1,5 @@
 class riemann::package(
-  $name   = 'riemann',
-  $ensure = 'present'
+  $ensure       = 'present'
 ) {
   $version     = $riemann::version
   $riemann_dir = $riemann::dir

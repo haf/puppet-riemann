@@ -43,11 +43,12 @@ class riemann(
       File[$home]
     ],
     before  => Anchor['riemann::end'],
-  } ->
+  }
+
   class { 'riemann::package':
     require => [
       Anchor['riemann::start'],
-      Class['java'],
+      Class['java']
     ],
     before  => Anchor['riemann::end'],
   } ->

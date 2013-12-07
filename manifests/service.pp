@@ -1,5 +1,5 @@
 class riemann::service(
-  $ensure = 'running',
+  $ensure = 'present',
 ) {
   $bin_dir = $riemann::bin_dir
   $user    = $riemann::user
