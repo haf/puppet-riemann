@@ -18,6 +18,7 @@
 #         --checks, -k <s+>:   A list of checks to run. (Default: cpu, load, memory, disk)
 class riemann::health(
   $enable               = true,
+  $user                 = 'riemann-health',
   $host                 = '127.0.0.1',
   $port                 = 5555,
   $event_host           = undef,
@@ -35,19 +36,16 @@ class riemann::health(
   $memory_warning       = '0.85',
   $memory_critical      = '0.95',
   # $checks               = 'cpu,load,memory,disk',
-  
-  $log_dir              = $riemann::params::health_log_dir,
-  $ruby_version         = $riemann::params::ruby_version
-) inherits riemann::params {
-  include svcutils
+) {
+  include riemann::common
 
-  $user = $riemann::params::health_user
+  $home                 = "/home/$user"
 
   $is_on_server = defined(Class['riemann'])
 
   $group = $is_on_server ? {
     true     => $riemann::group,
-    default  => $riemann::params::group,
+    default  => $riemann::common::group,
   }
 
   $_tags = $tags ? {
@@ -56,11 +54,24 @@ class riemann::health(
   }
 
   anchor { 'riemann::health::start': }
-  svcutils::svcuser { $user:
-    group   => $group,
+
+  file { $home:
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => '0755',
+    require => Anchor['riemann::health::start'],
+    before  => Anchor['riemann::health::end'],
+  }
+
+  user { $user:
+    gid     => $group,
+    system  => true,
+    home    => $home,
     require => [
       Anchor['riemann::health::start'],
-      Class['riemann::common']
+      Group[$group],
+      File[$home]
     ],
     before  => Anchor['riemann::health::end'],
   } ->

@@ -1,27 +1,40 @@
 class riemann::net(
-  $enable               = true,
+  $ensure               = 'present',
   $config_file          = '',
   $config_file_template = '',
-  $log_dir              = $riemann::params::net_log_dir,
-  $ruby_version         = $riemann::params::ruby_version
-) inherits riemann::params {
-  include svcutils
+  $user                 = 'riemann-net'
+) {
+  include riemann::common
 
-  $user = $riemann::params::net_user
+  $home                 = "/home/$user"
 
   $is_on_server = defined(Class['riemann'])
 
   $group = $is_on_server ? {
     true     => $riemann::group,
-    default  => $riemann::params::group,
+    default  => $riemann::common::group,
   }
 
   anchor { 'riemann::net::start': }
-  svcutils::svcuser { $user:
-    group => $group,
+
+  file { $home:
+    ensure  => directory,
+    owner   => $user,
+    group   => $group,
+    mode    => '0755',
+    require => Anchor['riemann::net::start'],
+    before  => Anchor['riemann::net::stop'],
+  }
+
+  user { $user:
+    ensure  => $ensure,
+    gid     => $group,
+    home    => $home,
+    system  => true,
     require => [
       Anchor['riemann::net::start'],
-      Class['riemann::common']
+      File[$home],
+      Group[$group]
     ],
     before  => Anchor['riemann::net::end'],
   } ->

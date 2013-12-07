@@ -17,17 +17,17 @@ class riemann::config {
 
   file { '/etc/riemann':
     ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
 
   file { $config_file:
     ensure  => present,
     source  => $config_source,
     content => $config_content,
-    owner   => $user,
-    group   => $group,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     require => File['/etc/riemann'],
   }
@@ -36,6 +36,7 @@ class riemann::config {
     ensure => directory,
     owner  => $user,
     group  => $group,
+    mode   => '0755',
   }
 
   file { '/etc/puppet/riemann.yaml':

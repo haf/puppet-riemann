@@ -8,26 +8,38 @@
 class riemann::dash(
   $config_file_source   = '',
   $config_file_template = 'riemann/riemann-dash.rb.erb',
-  $host                 = $riemann::params::dash_host,
-  $port                 = $riemann::params::dash_port,
-  $log_dir              = $riemann::params::dash_log_dir,
-  $ruby_version         = $riemann::params::ruby_version,
-  $config_file          = $riemann::params::dash_config_file,
-  $user                 = $riemann::params::dash_user,
-  $home                 = $riemann::params::dash_home,
-  $group                = $riemann::params::group,
+  $host                 = '0.0.0.0',
+  $port                 = 4567,
+  $log_dir              = '/var/log/riemann-dash',
+  $config_file          = '/etc/riemann/riemann-dash.rb',
+  $user                 = 'riemann-dash',
   $manage_firewall      = hiera('manage_firewalls', false)
-) inherits riemann::params {
-  include svcutils
+) {
+  include riemann::common
+
+  $home                 = "/home/$user"
+  $group                = $riemann::common::group
 
   anchor { 'riemann::dash::start': }
-  svcutils::svcuser { $user:
+
+  file { $home:
+    ensure  => directory,
+    owner   => $user,
     group   => $group,
+    mode    => '0755',
+    require => Anchor['riemann::dash::start'],
+    before  => Anchor['riemann::dash::end'],
+  }
+
+  user { $user:
+    gid     => $group,
     home    => $home,
     shell   => '/bin/bash',
+    system  => true,
     require => [
       Anchor['riemann::dash::start'],
-      Class['riemann::common']
+      Group[$group],
+      File[$home]
     ],
     before  => Anchor['riemann::dash::end'],
   } ->

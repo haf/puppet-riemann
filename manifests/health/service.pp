@@ -1,18 +1,11 @@
 class riemann::health::service(
-  $ensure = 'running',
-  $enable = true
+  $ensure = 'running'
 ) {
-  $log_dir      = $riemann::health::log_dir
-  $group        = $riemann::health::group
-  $ruby_version = $riemann::health::ruby_version
-  $user         = $riemann::health::user
   $tags         = repeated_param('tag', $riemann::health::_tags)
 
-  svcutils::mixsvc { 'riemann-health':
-    log_dir     => $log_dir,
+  supervisor::service { 'riemann-health':
     ensure      => $ensure,
-    enable      => $enable,
-    exec        => "/usr/local/rvm/bin/rvm $ruby_version do riemann-health \
+    command     => "riemann-health \
 --host $riemann::health::host \
 --port $riemann::health::port \
 --interval $riemann::health::interval \
@@ -26,10 +19,7 @@ $tags \
 --load-critical ${riemann::health::load_critical} \
 --memory-warning ${riemann::health::memory_warning} \
 --memory-critical ${riemann::health::memory_critical}",
-    description => 'Riemann Health Process',
-    group       => $group,
-    user        => $user,
-  } ->
-
-  rvm::system_user { 'riemann-health': }
+    group       => $riemann::health::group,
+    user        => $riemann::health::user,
+  }
 }

@@ -1,11 +1,12 @@
 # Installs the dashboard ruby gem.
 class riemann::dash::package(
   $ensure = 'installed'
-) inherits riemann::params {
-  rvm_gem { 'riemann-dash':
-    name         => 'riemann-dash',
+) {
+  riemann::utils::gem { 'riemann-dash':
     ensure       => $ensure,
-    ruby_version => 'ruby-1.9.3-p448',
-    require      => Rvm_system_ruby['ruby-1.9.3-p448'],
+    user         => $riemann::dash::user,
+    group        => $riemann::dash::group,
+    home         => $riemann::dash::home,
+    ruby_version => $riemann::common::ruby_version,
   }
 }
