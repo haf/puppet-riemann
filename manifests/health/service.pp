@@ -5,7 +5,7 @@ class riemann::health::service(
 
   supervisor::service { 'riemann-health':
     ensure      => $ensure,
-    command     => "riemann-health \
+    command     => "/home/${riemann::health::user}/.rbenv/shims/riemann-health \
 --host $riemann::health::host \
 --port $riemann::health::port \
 --interval $riemann::health::interval \

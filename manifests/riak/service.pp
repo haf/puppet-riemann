@@ -3,7 +3,7 @@ class riemann::riak::service(
 ) {
   supervisor::service { 'riemann-riak':
     ensure      => $ensure,
-    command     => "riemann-riak",
+    command     => "/home/${riemann::riak::user}/.rbenv/shims/riemann-riak",
     group       => $riemann::riak::group,
     user        => $riemann::riak::user,
   }

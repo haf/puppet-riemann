@@ -4,7 +4,7 @@ class riemann::dash::service(
 ) {
   supervisor::service { 'riemann-dash':
     ensure      => $ensure,
-    command     => "riemann-dash $riemann::dash::config_file",
+    command     => "/home/${riemann::dash::user}/.rbenv/shims/riemann-dash $riemann::dash::config_file",
     directory   => $riemann::dash::home,
     user        => $riemann::dash::user,
     group       => $riemann::dash::group,

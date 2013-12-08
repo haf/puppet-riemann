@@ -22,6 +22,12 @@ class riemann::dash::config {
     default => undef,
   }
 
+  file { "$riemann::dash::home/config":
+    ensure => directory,
+    owner  => $riemann::dash::user,
+    group  => $riemann::dash::group,
+  }
+
   file { '/etc/riemann/riemann-dash.rb':
     ensure  => present,
     source  => $_source,

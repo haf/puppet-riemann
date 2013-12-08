@@ -5,7 +5,7 @@ class riemann::package(
   $riemann_dir = $riemann::dir
 
   if $riemann::use_pkg {
-    package { $name:
+    package { 'riemann':
       ensure => $ensure,
     }
   }

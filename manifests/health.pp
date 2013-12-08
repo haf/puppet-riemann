@@ -55,36 +55,56 @@ class riemann::health(
 
   anchor { 'riemann::health::start': }
 
-  file { $home:
-    ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0755',
-    require => Anchor['riemann::health::start'],
-    before  => Anchor['riemann::health::end'],
-  }
-
   user { $user:
     gid     => $group,
     system  => true,
     home    => $home,
     require => [
       Anchor['riemann::health::start'],
-      Group[$group],
-      File[$home]
+      Group[$group]
     ],
     before  => Anchor['riemann::health::end'],
-  } ->
-  class { 'riemann::health::package':
-    require => Anchor['riemann::health::start'],
+  }
+
+  file { $home:
+    ensure => directory,
+    owner  => $user,
+    group  => $group,
+    mode   => '0755',
+    require => [
+      Anchor['riemann::health::start'],
+      User[$user]
+    ],
     before  => Anchor['riemann::health::end'],
-  } ->
+  }
+
+  riemann::utils::gem_service { 'riemann-tools.haf':
+    ensure       => 'installed',
+    user         => $user,
+    group        => $group,
+    home         => $home,
+    ruby_version => $riemann::common::ruby_version,
+    require      => [
+      Anchor['riemann::health::start'],
+      File[$home]
+    ],
+    before       => Anchor['riemann::health::end'],
+  }
+
   class { 'riemann::health::config':
-    require => Anchor['riemann::health::start'],
+    require => [
+      Anchor['riemann::health::start'],
+      Riemann::Utils::Gem_service['riemann-tools']
+    ],
     before  => Anchor['riemann::health::end'],
-  } ~>
+    notify  => Class['riemann::health::service'],
+  }
+
   class { 'riemann::health::service':
-    require => Anchor['riemann::health::start'],
+    require => [
+      Anchor['riemann::health::start'],
+      Class['riemann::health::config']
+    ],
     before  => Anchor['riemann::health::end'],
   }
 

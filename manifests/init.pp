@@ -12,7 +12,8 @@ class riemann(
   $user                 = 'riemann',
   $use_pkg              = true,
   $use_download         = false,
-  $manage_firewall      = hiera('manage_firewalls', false)
+  $manage_firewall      = hiera('manage_firewall', false),
+  $firewall_subnet      = '10.0.0.0/16'
 ) {
   include riemann::common
 
@@ -29,7 +30,10 @@ class riemann(
     mode   => '0755',
     owner  => $user,
     group  => $group,
-    require => Anchor['riemann::start'],
+    require => [
+      Anchor['riemann::start'],
+      User[$user]
+    ],
     before  => Anchor['riemann::end'],
   }
 
@@ -39,8 +43,7 @@ class riemann(
     home    => $home,
     require => [
       Anchor['riemann::start'],
-      Group[$group],
-      File[$home]
+      Group[$group]
     ],
     before  => Anchor['riemann::end'],
   }
@@ -55,10 +58,15 @@ class riemann(
   class { 'riemann::config':
     require => Anchor['riemann::start'],
     before  => Anchor['riemann::end'],
-  } ~>
+    notify  => Class['riemann::service'],
+  }
+
   class { 'riemann::service':
-    require => Anchor['riemann::start'],
-    before  => Anchor['riemann::end']
+    require => [
+      Anchor['riemann::start'],
+      Class['riemann::config']
+    ],
+    before  => Anchor['riemann::end'],
   }
 
   anchor { 'riemann::end': }

@@ -1,5 +1,5 @@
 # Creates a rbenv for the given user, and installs a gem in that environment.
-define riemann::utils::gem(
+define riemann::utils::gem_service(
   $ensure = 'installed',
   $home,
   $user,
@@ -12,11 +12,14 @@ define riemann::utils::gem(
     require => File[$home],
   }
 
-  rbenv::compile { $riemann::common::ruby_version:
-    user   => $user,
-    group  => $group,
-    home   => $home,
-    global => true,
+  $_compile_name = "${user}-${$riemann::common::ruby_version}"
+
+  rbenv::compile { $_compile_name:
+    user    => $user,
+    group   => $group,
+    home    => $home,
+    global  => true,
+    ruby    => $riemann::common::ruby_version,
     require => Rbenv::Install[$user],
   }
 
@@ -25,6 +28,6 @@ define riemann::utils::gem(
     ruby         => $ruby_version,
     user         => $user,
     home         => $home,
-    require      => Rbenv::Compile[$ruby_version],
+    require      => Rbenv::Compile[$_compile_name],
   }
 }
