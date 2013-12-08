@@ -78,8 +78,9 @@ class riemann::health(
     before  => Anchor['riemann::health::end'],
   }
 
-  riemann::utils::gem_service { 'riemann-tools.haf':
+  riemann::utils::gem_service { 'riemann-tools':
     ensure       => 'installed',
+    gem          => 'riemann-tools.haf',
     user         => $user,
     group        => $group,
     home         => $home,

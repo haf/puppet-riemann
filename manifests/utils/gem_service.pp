@@ -1,6 +1,7 @@
 # Creates a rbenv for the given user, and installs a gem in that environment.
 define riemann::utils::gem_service(
   $ensure = 'installed',
+  $gem    = $name,
   $home,
   $user,
   $group,
@@ -23,7 +24,7 @@ define riemann::utils::gem_service(
     require => Rbenv::Install[$user],
   }
 
-  rbenv::gem { $name:
+  rbenv::gem { $gem:
     ensure       => present,
     ruby         => $ruby_version,
     user         => $user,

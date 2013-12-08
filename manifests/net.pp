@@ -64,7 +64,8 @@ class riemann::net(
     before  => Anchor['riemann::net::end'],
   }
 
-  riemann::utils::gem_service { 'riemann-tools.haf':
+  riemann::utils::gem_service { 'riemann-tools':
+    gem          => 'riemann-tools.haf',
     ensure       => $ensure,
     user         => $user,
     group        => $group,
