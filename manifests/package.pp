@@ -1,11 +1,15 @@
-class riemann::package inherits riemann::params {
+class riemann::package(
+  $ensure       = 'present'
+) {
   $version     = $riemann::version
   $riemann_dir = $riemann::dir
-  $use_pkg     = $riemann::use_pkg
 
-  ensure_packages($riemann::params::packages)
-
-  if $use_pkg {
+  if $riemann::use_pkg {
+    package { 'riemann':
+      ensure => $ensure,
+    }
+  }
+  elsif $riemann::use_download {
     $package_provider = $::osfamily ? {
       /(?i:linux|redhat)/ => 'rpm',
       default             => 'dpkg',

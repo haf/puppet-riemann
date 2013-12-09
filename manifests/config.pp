@@ -17,17 +17,17 @@ class riemann::config {
 
   file { '/etc/riemann':
     ensure => directory,
-    owner  => $user,
-    group  => $group,
-    mode   => '0644',
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0755',
   }
 
   file { $config_file:
     ensure  => present,
     source  => $config_source,
     content => $config_content,
-    owner   => $user,
-    group   => $group,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0644',
     require => File['/etc/riemann'],
   }
@@ -36,6 +36,7 @@ class riemann::config {
     ensure => directory,
     owner  => $user,
     group  => $group,
+    mode   => '0755',
   }
 
   file { '/etc/puppet/riemann.yaml':
@@ -49,21 +50,21 @@ class riemann::config {
       state   => ['NEW'],
       dport   => $port,
       action  => 'accept',
-      source  => '10.0.0.0/16',
+      source  => $riemann::firewall_subnet,
     }
     firewall { "101 allow riemann:$port":
       proto   => 'udp',
       state   => ['NEW'],
       dport   => $port,
       action  => 'accept',
-      source  => '10.0.0.0/16',
+      source  => $riemann::firewall_subnet,
     }
     firewall { "102 allow riemann-websockets:5556":
       proto   => 'tcp',
       state   => ['NEW'],
       dport   => 5556,
       action  => 'accept',
-      source  => '10.0.0.0/16',
+      source  => $riemann::firewall_subnet,
     }
   }
 }

@@ -1,25 +1,12 @@
 # Installs the riemann-dash service.
 class riemann::dash::service(
-  $ensure = 'running',
-  $enable = true
+  $ensure = 'present',
 ) {
-  $log_dir      = $riemann::dash::log_dir
-  $config_file  = $riemann::dash::config_file
-  $home         = $riemann::dash::home
-  $group        = $riemann::dash::group
-  $ruby_version = $riemann::dash::ruby_version
-  $user         = $riemann::dash::user
-
-  svcutils::mixsvc { 'riemann-dash':
-    log_dir     => $log_dir,
+  supervisor::service { 'riemann-dash':
     ensure      => $ensure,
-    enable      => $enable,
-    exec        => "/usr/local/rvm/bin/rvm $ruby_version exec riemann-dash $config_file",
-    description => 'A service that launches the riemann dashboard',
-    group       => $group,
-    home        => $home,
-    user        => $user,
-  } ->
-
-  rvm::system_user { $user: }
+    command     => "/home/${riemann::dash::user}/.rbenv/shims/riemann-dash $riemann::dash::config_file",
+    directory   => $riemann::dash::home,
+    user        => $riemann::dash::user,
+    group       => $riemann::dash::group,
+  }
 }

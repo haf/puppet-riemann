@@ -1,7 +1,9 @@
 class riemann::common(
-  $group = $riemann::params::group,
+  $group = 'riemanns',
   $ruby_version
-) inherits riemann::params {
+) {
+  require epel
+
   anchor { 'riemann::common::start': }
 
   group { $group:
@@ -11,19 +13,20 @@ class riemann::common(
     before  => Anchor['riemann::common::end'],
   }
 
-  ensure_packages($riemann::params::tools_packages)
+  $required_packages = [
+    'make',
+    'automake',
+    'gcc',
+    'gcc-c++',
+    'libxml2',
+    'libxml2-devel',
+    'libxslt',
+    'libxslt-devel'
+  ]
 
-  rvm_gem { 'riemann-tools':
-    ensure       => 'installed',
-    name         => 'riemann-tools',
-    ruby_version => $ruby_version,
-    require      => [
-      Rvm_system_ruby["ruby-$ruby_version"],
-      Package[$riemann::params::tools_packages],
-      Anchor['riemann::common::start']
-    ],
-    before       => Anchor['riemann::common::end'],
-  }
+  ensure_packages($required_packages)
+
+  Anchor['riemann::common::start'] -> Package[$required_packages] -> Anchor['riemann::common::end']
 
   anchor { 'riemann::common::end': }
 }

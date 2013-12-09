@@ -1,22 +1,32 @@
 # Gathers munin statistics and submits them to Riemann.
 class riemann::net::service(
-  $ensure = 'running',
-  $enable = true
+  $ensure = 'present'
 ) {
-  $log_dir = $riemann::net::log_dir
-  $group   = $riemann::net::group
-  $ruby_version = $riemann::net::ruby_version
-  $user         = $riemann::net::user
+  $tags         = repeated_param('tag', $riemann::net::tags)
+  $attributes   = repeated_param('attribute', $riemann::net::attributes)
+  $tcp_flag = $riemann::net::use_tcp ? {
+    true    => '--tcp',
+    default => '--no-tcp'
+  }
+  $interfaces = $riemann::net::interfaces ? {
+    undef   => '',
+    default => "--interfaces $riemann::net::interfaces"
+  }
 
-  svcutils::mixsvc { 'riemann-net':
-    log_dir     => $log_dir,
+  supervisor::service { 'riemann-net':
     ensure      => $ensure,
-    enable      => $enable,
-    exec        => "/usr/local/rvm/bin/rvm $ruby_version do riemann-net",
-    description => 'Riemann Net Process',
-    group       => $group,
-    user        => $user,
-  } ->
-
-  rvm::system_user { $user: }
+    command     => "/home/${riemann::net::user}/.rbenv/shims/riemann-net \
+--host $riemann::net::host \
+--port $riemann::net::port \
+--event-host $riemann::net::event_host \
+--interval $riemann::net::interval \
+$tags \
+$attributes \
+--timeout $riemann::net::timeout \
+$tcp_flag \
+$interfaces \
+--ignore-interfaces $riemann::net::ignore_interfaces",
+    group       => $riemann::net::group,
+    user        => $riemann::net::user,
+  }
 }
