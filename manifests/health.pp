@@ -56,6 +56,7 @@ class riemann::health(
   anchor { 'riemann::health::start': }
 
   user { $user:
+    ensure  => 'present',
     gid     => $group,
     system  => true,
     home    => $home,
