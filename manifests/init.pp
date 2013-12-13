@@ -49,12 +49,10 @@ class riemann(
   }
 
   class { 'riemann::package':
-    require => [
-      Anchor['riemann::start'],
-      Class['java']
-    ],
+    require => Anchor['riemann::start'],
     before  => Anchor['riemann::end'],
   } ->
+
   class { 'riemann::config':
     require => Anchor['riemann::start'],
     before  => Anchor['riemann::end'],
@@ -64,7 +62,8 @@ class riemann(
   class { 'riemann::service':
     require => [
       Anchor['riemann::start'],
-      Class['riemann::config']
+      Class['riemann::config'],
+      Class['java']
     ],
     before  => Anchor['riemann::end'],
   }
