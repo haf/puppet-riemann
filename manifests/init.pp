@@ -1,6 +1,6 @@
 # Install the riemann server on the server.
 class riemann(
-  $version              = '0.2.0',
+  $version              = '0.2.6',
   $config_file          = '/etc/riemann/riemann.config',
   $config_file_source   = '',
   $config_file_template = 'riemann/riemann.config.erb',
